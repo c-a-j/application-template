@@ -1,0 +1,42 @@
+\usepackage{fontspec} 
+
+\newcommand{\@fontpath}{../common/fonts/}
+
+\newcommand{\@fontweightextralight}{100}
+\newcommand{\@fontweightlight}{200}
+\newcommand{\@fontweightmedium}{350}
+\newcommand{\@fontweightbold}{500}
+\newcommand{\@fontweightextrabold}{700}
+
+% ------------------------------------------------------------------------------
+% Create font command
+% ------------------------------------------------------------------------------
+\newcommand{\createfont}[2]{%
+  % #1 = command base name (e.g., primaryfontitalic)
+  % #2 = font file name (e.g., Merriweather-VariableFont_opsz,wdth,wght)
+  
+  \expandafter\newcommand\csname @#1file\endcsname{#2.ttf}%
+
+
+  % Create weight variants
+  \expandafter\NewDocumentCommand\csname #1extralight\endcsname{m O{11pt}}{%
+    \fontspec[Path=\@fontpath,RawFeature={+axis={wght=\@fontweightextralight}},Renderer=Harfbuzz]{\csname @#1file\endcsname}%
+    \fontsize{##1}{##2}\selectfont%
+  }
+  \expandafter\NewDocumentCommand\csname #1light\endcsname{m O{11pt}}{%
+    \fontspec[Path=\@fontpath,RawFeature={+axis={wght=\@fontweightlight}},Renderer=Harfbuzz]{\csname @#1file\endcsname}%
+    \fontsize{##1}{##2}\selectfont%
+  }
+  \expandafter\NewDocumentCommand\csname #1medium\endcsname{m O{11pt}}{%
+    \fontspec[Path=\@fontpath,RawFeature={+axis={wght=\@fontweightmedium}},Renderer=Harfbuzz]{\csname @#1file\endcsname}%
+    \fontsize{##1}{##2}\selectfont%
+  }
+  \expandafter\NewDocumentCommand\csname #1bold\endcsname{m O{11pt}}{%
+    \fontspec[Path=\@fontpath,RawFeature={+axis={wght=\@fontweightbold}},Renderer=Harfbuzz]{\csname @#1file\endcsname}%
+    \fontsize{##1}{##2}\selectfont%
+  }
+  \expandafter\NewDocumentCommand\csname #1extrabold\endcsname{m O{11pt}}{%
+    \fontspec[Path=\@fontpath,RawFeature={+axis={wght=\@fontweightextrabold}},Renderer=Harfbuzz]{\csname @#1file\endcsname}%
+    \fontsize{##1}{##2}\selectfont%
+  }
+}

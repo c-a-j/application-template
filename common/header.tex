@@ -1,0 +1,18 @@
+\newcommand{\headertitle}[3]{%
+  \centering{%
+    {\primaryfontmedium{28pt}#1 #2. #3}%
+  } \\[5pt]%
+}
+
+\newcommand{\headersubtitle}[1]{%
+  \centering{
+    \color{headings}
+    \primaryfontlight{11pt}#1
+  }
+  \par\headerskip
+}
+
+\newcommand{\header}{
+  \headertitle{\myfirstname}{\mymiddleinitial}{\mylastname}
+  \headersubtitle{\myemail \subdelim \myphone \subdelim \mycity, \mystate}
+}
