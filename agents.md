@@ -66,7 +66,7 @@ This document describes repository structure and generic tailoring rules. Keep a
 
 ## Application checklist
 
-- [ ] `common/companyinfo.tex` updated
+- [ ] `common/info/company.tex` updated
 - [ ] `common/settings.tex` reviewed (recipient/greeting)
 - [ ] Resume components tailored to job keywords
 - [ ] Cover components tailored to role/company

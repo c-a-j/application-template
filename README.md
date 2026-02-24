@@ -93,48 +93,49 @@ letter. Delete the dummy signature file if you don't want to include one.
    - `make cover` to compile only the cover letter
    - `make resume` to compile only the resume
    - `make clean` to get remove all binaries and pdf files
+   - `make show` open resume and cover. 
+   - `make noshow` close resume and cover. 
+
+**Note**: I use [Okular](https://okular.kde.org/) for viewing PDFs. It's great
+for this purpose because it will hot reload after compiling the latex. Adjust
+the `make show` directive if you use something else.
 
 ## Suggested Workflow
 
-First, obviously, update the template with your information in your main branch.
+Keep template-level improvements on `main/master`, then archive each application. This
+avoids maintaining long-lived branches per company.
 
-When you want to apply to a new job, you should:
-1. Create a new branch for the specific job application
-1. Add the job description to the `job-desc.txt` file
-   - If you get an interview, you can use this file to review the job
-   description and requirements because the postings will often be taken down
-   quickly.
-1. Modify the information files in the `common/` directory
-   - `myinfo.tex` - personal information
-   - `companyinfo.tex` - company and position information
-1. Make position/company specific changes to the resume and cover letter
-components, if needed.  They are broken down for convenience. For example, the
-body of the cover letter may not change often, but the intro and conclusion may
-need to be updated for each job.
-1. Compile and submit. If you submit another application to this company, just
-create another branch from this branch so you don't have to start from scratch.
+For each job application:
+1. (Optional) Start from a prior application archive:
+   - Extract everything: `./archive.sh -x <archive-name>`
+   - Extract only specific sections: `./archive.sh -xrl <archive-name>` (resume + cover letter)
+2. Add or update the job posting in `job-desc`.
+3. Update shared info files:
+   - `common/info/personal.tex` - personal information
+   - `common/info/company.tex` - company and role information
+4. Tailor resume and cover components as needed:
+   - `resume/components/*`
+   - `cover/components/*`
+5. Compile and submit (`make`).
+6. Archive the final application state:
+   - `./archive.sh -c <archive-name>`
 
-### Introducing Template Changes to Existing Branches
+### Reusing Previous Applications
 
-For example, you've applied to company XYZ in the past. Since then, the fonts
-have changed in resume.cls and cover.cls in the main branch. You're about to
-apply to XYZ again, but you want to use the new fonts. To avoid starting from
-scratch or overwriting your application specific information by merging the main
-branch, you can checkout individual files or cherry pick a commmit.
+Use extraction flags to pull only what you want from an archive:
 
-Checkout individual files:
 ```bash
-git checkout XYZ_app1
-git checkout -b XYZ_app2
-git checkout main resume/resume.cls cover/cover.cls
+# Extract all sections (default with -x)
+./archive.sh -x acme_2026
+
+# Extract only resume + cover letter components
+./archive.sh -xrl acme_2026
+
+# Extract only shared info
+./archive.sh -xi acme_2026
+
+# Extract only job description
+./archive.sh -xj acme_2026
 ```
 
-Cherry pick a commit that only includes template changes:
-```bash
-git checkout XYZ_app1
-git checkout -b XYZ_app2
-git cherry-pick $commit_hash
-```
-
-Note: You could also merge off the main branch and checkout the company/position
-specific files from the first application. Either way works.
+This lets you reuse targeted parts without branching for every application.

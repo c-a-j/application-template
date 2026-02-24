@@ -18,6 +18,13 @@ cover:
 	cd cover && lualatex -interaction=nonstopmode main.tex && mv main.pdf ../cover.pdf
 	@echo "Resume compilation complete!"
 
+show:
+	{ okular resume.pdf & okular cover.pdf & }
+
+noshow:
+	@pkill -f 'okular .*resume\.pdf' || true
+	@pkill -f 'okular .*cover\.pdf' || true
+
 # Clean resume directory
 resume-clean:
 	@echo "Cleaning up generated resume files..."
