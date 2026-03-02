@@ -17,6 +17,7 @@ Description:
 Operations (choose one):
   -c, --create    Create an archive
   -x, --extract   Extract an archive
+  -u, --update    Update archives with a file
 
 Extract selection:
   -a, --all       Extract all sections (default)
@@ -38,6 +39,8 @@ Examples:
   $(basename "$0") -x acme # extract all components
   $(basename "$0") -xa acme # extract all components
   $(basename "$0") -xrl acme # extract only the resume and letter components
+  $(basename "$0") -u acme resume/components/newfile.tex # insert/update newfile.tex into the acme archive
+  $(basename "$0") -ua acme resume/components/newfile.tex # insert/update newfile.tex in all archives
 EOF
 exit 0
 }
@@ -60,6 +63,11 @@ proceed() {
 get-name() {
   echo "Specify archive name:"
   read name
+}
+
+get-update-file() {
+  echo "Specify file to insert/update:"
+  read updateFile
 }
 
 create() {
@@ -129,8 +137,62 @@ extract() {
   exit 0
 }
 
-short="cxarlijh"
-long="create,extract,all,resume,letter,info,job,help"
+update-checks() {
+  if [ ! -f "$updateFile" ]; then
+    echo "$updateFile doesn't exist"
+    exit 1
+  fi
+
+  if (( resume )); then
+    echo "--resume is invalid input for update"
+    exit 1
+  fi
+
+  if (( letter )); then
+    echo "--letter is invalid input for update"
+    exit 1
+  fi
+
+  if (( info )); then
+    echo "--info is invalid input for update"
+    exit 1
+  fi
+  
+  if (( job )); then
+    echo "--job is invalid input for update"
+    exit 1
+  fi
+}
+
+update-all() {
+  for file in $(ls "$archiveDir"); do
+    update-one "$file"
+  done
+}
+
+update-one() {
+  archiveFile=$1
+  if [ ! -f "$archiveFile" ]; then
+    echo "$archiveFile doesn't exist"
+    exit 1
+  fi
+  echo "updating $archiveFile with $updateFile"
+  xz -d "$archiveFile"
+  tar -rf "${archiveFile%.*}" "$updateFile"
+  xz "${archiveFile%.*}"
+}
+
+update() {
+  update-checks
+  if (( all )); then
+    update-all
+  else 
+    update-one "${f}"
+  fi
+}
+
+short="cxuarlijh"
+long="create,extract,update,all,resume,letter,info,job,help"
 opts=$(getopt \
     --options "$short" \
     --long "$long" \
@@ -146,6 +208,7 @@ eval set -- "$opts"
 
 create=0
 extract=0
+update=0
 all=0
 resume=0
 letter=0
@@ -157,6 +220,7 @@ while (( $# )); do
     -h | --help ) print-help; ;;
     -c | --create ) create=1; shift 1 ;;
     -x | --extract ) extract=1; shift 1 ;;
+    -u | --update ) update=1; shift 1 ;;
     -a | --all ) all=1; shift 1 ;;
     -r | --resume ) resume=1; shift 1 ;;
     -l | --letter ) letter=1; shift 1 ;;
@@ -166,21 +230,54 @@ while (( $# )); do
   esac
 done
 
-if (( create && extract )); then
-  echo "error: can't create and extract in the same command"
-  exit 0
+if (( create && extract )) || (( create && update )) || (( extract && update )); then
+  echo "error: can't create, extract, or update in the same command"
+  exit 1
 fi
 
-if (( $# == 0 )); then
-  get-name
-elif (( $# > 1 )); then
-  echo "error: too many arguments"
-  print-help
-  exit 0
-else
-  name=$1
+if ! (( create || extract || update )); then
+  echo "nothing to do"
+  exit 1
 fi
-f="$archiveDir/${name##*.}.tar.xz"
+
+define-name() {
+  f="$archiveDir/${name##*.}.tar.xz"
+}
+
+if (( create || extract )); then
+  if (( $# == 0 )); then
+    get-name
+  elif (( $# > 1 )); then
+    echo "error: too many arguments"
+    print-help
+    exit 0
+  else
+    name=$1
+  fi
+  define-name
+fi
+
+if (( update )); then
+  if (( $# == 0 )); then
+    get-name
+    get-update-file
+    define-name
+  elif (( $# == 1 && all )); then
+    updateFile=$1
+  elif (( $# > 2 )) || (( $# > 1 && all )); then
+    echo "error: too many arguments"
+    print-help
+    exit 0
+  elif (( $# == 2 )); then
+    name=$1
+    updateFile=$2
+    define-name
+  else
+    echo "error: invalid arguments"
+    print-help
+    exit 0
+  fi
+fi
 
 if (( create )); then
   create
@@ -188,4 +285,8 @@ fi
 
 if (( extract )); then
   extract
+fi
+
+if (( update )); then
+  update
 fi
