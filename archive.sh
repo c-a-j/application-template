@@ -77,7 +77,8 @@ create() {
       resume/components \
       cover/components \
       common/info \
-      job-desc*
+      job-desc* \
+      plan.md
   fi
 }
 
@@ -98,7 +99,8 @@ extract-info() {
 
 extract-job() {
   extractDir="$rootDir"
-  tar -xf "$f" -C "$extractDir" "job-desc*"
+  tar -xf "$f" -C "$extractDir" "job-desc*" || true
+  tar -xf "$f" -C "$extractDir" "plan.md" || true
 }
 
 extract() {
