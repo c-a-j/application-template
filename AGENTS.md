@@ -17,8 +17,8 @@ all candidate-specific details in `me.md`. Job description will be located in
 ## Shared files (`common/`)
 
 - `common/header.tex`: shared name/contact header. **never modify**
-- `common/myinfo.tex`: candidate personal/contact fields. **never modify**
-- `common/companyinfo.tex`: per-application role/company fields.
+- `common/info/personal.tex`: candidate personal/contact fields. **never modify**
+- `common/info/company.tex`: per-application role/company fields.
 - `common/settings.tex`: greeting/closing defaults. **never modify**
 - `common/colors.tex`: color definitions. **never modify**
 - `common/fonts.tex`: font config for resume/cover classes. **never modify**
