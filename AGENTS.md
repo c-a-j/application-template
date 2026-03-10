@@ -57,14 +57,13 @@ all candidate-specific details in `me.md`. Job description will be located in
 
 1. Read the job description and identify role, company, required skills, preferred skills, and tone.
 2. Load `me.md` and use it as the only source of candidate facts.
-3. Update `common/companyinfo.tex` for the target application.
+3. Update `common/info/company.tex` for the target application.
 4. Tailor resume component wording/order to align with job requirements while preserving factual accuracy.
 5. Tailor cover letter component wording to the role/company while preserving factual accuracy.
 
 ## Application checklist
 
-- [ ] `common/companyinfo.tex` updated
-- [ ] `common/settings.tex` reviewed (recipient/greeting)
+- [ ] `common/info/company.tex` updated
 - [ ] Resume components tailored to job keywords
 - [ ] Cover components tailored to role/company
 - [ ] Candidate facts validated against `me.md`

@@ -14,8 +14,7 @@
 ## Tasks (in order)
 
 1. **Company and role**
-   - Update `common/companyinfo.tex` with role/company from the job and the URLs below.
-   - Optionally review `common/settings.tex` (recipient, greeting).
+   - Update `common/info/company.tex` with role/company from the job and the URLs below.
 
 2. **Resume**
    - Tailor these to match the job; use only facts from `me.md`:
@@ -38,4 +37,4 @@
 
 - **Contact:** 
 - **About:** 
-- **Position (job description):**
+- **Position (job description):** 
