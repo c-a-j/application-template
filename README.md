@@ -6,7 +6,7 @@
 
 - **LaTeX Distribution**: TeX Live (recommended) or MiKTeX
 - **LaTeX Engine**: LuaLaTeX (required for fontspec and custom fonts)
-- **Build Tool**: `make` (optional, but convenient)
+- **Command Runner**: `just` (optional, but ***very*** convenient)
 
 ### LaTeX Packages
 
@@ -89,12 +89,14 @@ letter. Delete the dummy signature file if you don't want to include one.
 1. Ensure LuaLaTeX is available: `lualatex --version`
 1. Install any missing LaTeX packages
 1. Download and place the required fonts in `common/fonts/`
-1. Run `make` to compile both documents
-   - `make cover` to compile only the cover letter
-   - `make resume` to compile only the resume
-   - `make clean` to get remove all binaries and pdf files
-   - `make show` open resume and cover. 
-   - `make noshow` close resume and cover. 
+1. Run `just` to compile both documents
+   - `just cover` compiles only the cover letter
+   - `just resume` compiles only the resume
+   - `just clean` removes all binaries, logs, and pdf files
+   - `just show` opens resume and cover. 
+   - `just noshow` closes resume and cover. 
+   - `just archive app_name` creates an archive of the current components
+   - `just extract app_name` extracts an archive
 
 **Note**: I use [Okular](https://okular.kde.org/) for viewing PDFs. It's great
 for this purpose because it will hot reload after compiling the latex. Adjust
@@ -116,9 +118,10 @@ For each job application:
 4. Tailor resume and cover components as needed:
    - `resume/components/*`
    - `cover/components/*`
-5. Compile and submit (`make`).
+5. Compile (`just`) and submit
 6. Archive the final application state:
    - `./archive.sh -c <archive-name>`
+   - or `just archive <archive-name>`
 
 ### Reusing Previous Applications
 
